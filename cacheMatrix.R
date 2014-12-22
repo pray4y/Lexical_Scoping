@@ -1,18 +1,18 @@
-## The first function will cache the inverse of an n by n matrix, 
-## while the second function will compute the inverse of a matrix.
+## The first function will cache the inverse of an n by n matrix 'z', 
+## while the second function will compute the inverse of matrix 'z'.
 
 
 ## makeCacheMatrix, similar to cachemean, will creates a a list containing a 
 ## function to set/get the matrix and set/get its inverse matrix.
 
-makeCacheMatrix <- function(x = matrix()) {
+makeCacheMatrix <- function(z = matrix()) {
         m <- NULL    
         set <- function(y) {
-                x <<- y
+                z <<- y
                 m <<- NULL
         }
         get <- function() {
-                x
+                z
         }
         setmat <- function(mat) {
                 m <<- mat
@@ -25,17 +25,17 @@ makeCacheMatrix <- function(x = matrix()) {
 
 
 ## cacheSolve first detects whether the the inverse of a given n by n invertible
-## matrix 'x' has been calculated. If the inverse has already been calculated, 
+## matrix 'z' has been calculated. If the inverse has already been calculated, 
 ## cacheSolve will get the cached inverse and print it. If the inverse has not 
 ## already been calculated, cacheSolve will then calculate it and print it.
 
-cacheSolve <- function(x, ...) {
-        m <- x$getmat()
+cacheSolve <- function(z, ...) {
+        m <- z$getmat()
         if(!is.null(m)) {
                 message("getting cached inverse")
                 return(m)
         }
-        x <- x$get()
+        x <- z$get()
         
         n <- nrow(x)
         id <- diag(nrow = n) ## create an n by n identity matrix
@@ -82,6 +82,6 @@ cacheSolve <- function(x, ...) {
                 }
         }
         m <- xid[, 4:6]
-        x$setmat(m)
+        z$setmat(m)
         m
 }
