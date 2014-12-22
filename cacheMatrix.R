@@ -1,20 +1,26 @@
 ## The first function will cache the inverse of an n by n matrix, 
 ## while the second function will compute the inverse of a matrix.
 
+
 ## makeCacheMatrix, similar to cachemean, will creates a a list containing a 
 ## function to set/get the matrix and set/get its inverse matrix.
 
-makeCacheMatrix <- function(x = mat()) {
+makeCacheMatrix <- function(x = matrix()) {
         m <- NULL    
         set <- function(y) {
-            x <<- y
-            m <<- NULL
+                x <<- y
+                m <<- NULL
         }
-        get <- function() x
-        setmat <- function(mat) m <<- mat
-        getmat <- function() m
-        list(set = set, get = get,
-             setmat = setmat, getmat = getmat)
+        get <- function() {
+                x
+        }
+        setmat <- function(mat) {
+                m <<- mat
+        }
+        getmat <- function() {
+                m
+        }
+        list(set = set, get = get, setmat = setmat, getmat = getmat)
 }
 
 
@@ -23,17 +29,26 @@ makeCacheMatrix <- function(x = mat()) {
 ## cacheSolve will get the cached inverse and print it. If the inverse has not 
 ## already been calculated, cacheSolve will then calculate it and print it.
 
-cacheSolve <- function(x = matrix, ...) {
+cacheSolve <- function(x, ...) {
+        m <- x$getmat()
+        if(!is.null(m)) {
+                message("getting cached inverse")
+                return(m)
+        }
+        x <- x$get()
+        
         n <- nrow(x)
-        id <- diag(nrow = n)
+        id <- diag(nrow = n) ## create an n by n identity matrix
         xid <- cbind(x, id)
 
         for (i in 1:n) {
                 for (j in (1:n)[-i]) {
                     
-                    k <- 1
+                    ## if xid[i, i] is a zero, then use row calculations
+                    ## to remove zero
+                    k <- 1 
                     while (k <= n) {
-                            if (identical(0, xid[i,i]) == TRUE) {
+                            if (identical(0, xid[i, i]) == TRUE) {
                                     if (i + k <= n) {
                                             xid[i,] <- xid[i,] + xid[i+k,]
                                             k <- k + 1
@@ -47,9 +62,11 @@ cacheSolve <- function(x = matrix, ...) {
                     
                     xid[i,] <- xid[i,] / xid[i, i]
                     
+                    ## if xid[j, i] is a zero, then use row calculations
+                    ## to remove zero
                     k <- 1
                     while (k <= n) {              
-                            if (identical(0, xid[j,i]) == TRUE) {
+                            if (identical(0, xid[j, i]) == TRUE) {
                                     if (i + k <= n) {
                                             xid[j,] <- xid[j,] + xid[k,]
                                             k <- k + 1
@@ -64,6 +81,7 @@ cacheSolve <- function(x = matrix, ...) {
                     xid[j,] <- xid[j,] - xid[i,] * xid[j, i]
                 }
         }
-        inv <- xid[, 4:6]
-        inv
+        m <- xid[, 4:6]
+        x$setmat(m)
+        m
 }
