@@ -28,6 +28,7 @@ makeCacheMatrix <- function(z = matrix()) {
 ## matrix 'z' has been calculated. If the inverse has already been calculated, 
 ## cacheSolve will get the cached inverse and print it. If the inverse has not 
 ## already been calculated, cacheSolve will then calculate it and print it.
+#### Solve() is a handy tool in R to solve the inverse matrix.
 
 cacheSolve <- function(z, ...) {
         m <- z$getmat()
